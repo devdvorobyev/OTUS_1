@@ -1,0 +1,8 @@
+@echo off 
+@chcp 866
+set /p path=Введите путь к папке (если папка для чтения в той же дерриктории - достаточно "./имя_папки"): 
+set /p depFlag=Введите флаг (например -d): 
+set /p depLevel=Введите уровень погружения: 
+npm start %path% %depFlag% %depLevel%
+
+Pause
