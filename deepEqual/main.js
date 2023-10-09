@@ -25,7 +25,7 @@ const obj4 = {
         b: {
             c: {
                 d: {
-                    e: ['',3,4,4,4]
+                    e: ['',3,5,4,4]
                 },
             },
         },
@@ -44,13 +44,12 @@ let deepEqual = (sourceObject, destinationObject, notValidPath = '$') => {
         arrayCount++;
         if(sourceObject.hasOwnProperty(key) && destinationObject.hasOwnProperty(key)){
             if(typeof sourceObject[key] !== 'object' && !Array.isArray(sourceObject[key]) ){
-                console.log(sourceObject[key]);
                 if(sourceObject[key] !== destinationObject[key]){
     
                     notEqualPath += '.' + key;
                     return { equalFlag:false, notEqualPath }
     
-                }else if(Array.isArray(sourceObject) && arrayCount == sourceObject.length){
+                }else if(Array.isArray(sourceObject) && arrayCount === sourceObject.length){
                     return { equalFlag, notEqualPath }
                 }
 
