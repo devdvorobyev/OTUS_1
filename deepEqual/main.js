@@ -1,16 +1,34 @@
 const obj1 = {
     a: {
-        b: 1,
+        b: [1,3,4,5,6],
     },
 };
 const obj2 = {
     a: {
-        b: 2,
+        b: [1,2,3,4,5],
     },
 };
 const obj3 = {
     a: {
-        b: 1,
+        b: {
+            c: {
+                d: {
+                    e: ['',3,4,4,4]
+                },
+            },
+        },
+    },
+};
+
+const obj4 = {
+    a: {
+        b: {
+            c: {
+                d: {
+                    e: ['',3,4,4,4]
+                },
+            },
+        },
     },
 };
 
@@ -18,41 +36,41 @@ let deepEqual = (sourceObject, destinationObject, notValidPath = '$') => {
 
     var equalFlag = true,
         notEqualPath = notValidPath,
-        resultObject = {};
+        resultObject = {},
+        arrayCount = 0;
 
     for (const key in sourceObject) {
         /* Проверка по типам +  самих значений*/
-        if(typeof sourceObject[key] != 'object' && !Array.isArray(sourceObject[key]) ){
+        arrayCount++;
+        if(sourceObject.hasOwnProperty(key) && destinationObject.hasOwnProperty(key)){
+            if(typeof sourceObject[key] !== 'object' && !Array.isArray(sourceObject[key]) ){
+                console.log(sourceObject[key]);
+                if(sourceObject[key] !== destinationObject[key]){
+    
+                    notEqualPath += '.' + key;
+                    return { equalFlag:false, notEqualPath }
+    
+                }else if(Array.isArray(sourceObject) && arrayCount == sourceObject.length){
+                    return { equalFlag, notEqualPath }
+                }
 
-            if(sourceObject[key] != destinationObject[key]){
-
-                notEqualPath += '.' + key;
+            /* Проверка вложенных объектов */
+            }else if(typeof sourceObject[key] === typeof destinationObject[key]){
+    
+                Object.assign(resultObject, deepEqual(sourceObject[key], destinationObject[key], notEqualPath + '.' + key));
+                return resultObject
+    
+            }else{
+    
                 return { equalFlag:false, notEqualPath }
-
-            }else if(Array.isArray(sourceObject) && sourceObject[key] == sourceObject.length){
-
-                return { equalFlag, notEqualPath }
-
-            }else if(!Array.isArray(sourceObject) && typeof sourceObject == 'object'){
-
-                return { equalFlag, notEqualPath }
-
-            }
-            
-        /* Проверка вложенных объектов */
-        }else if(typeof sourceObject[key] == 'object' && typeof destinationObject[key] == 'object'){
-
-            Object.assign(resultObject,deepEqual(sourceObject[key], destinationObject[key], notEqualPath + '.' + key));
-            return resultObject
-
+    
+            }   
         }else{
-
             return { equalFlag:false, notEqualPath }
-
         }
     }
 }
 
-const { equalFlag, notEqualPath } = deepEqual(obj1, obj2);
+const { equalFlag, notEqualPath } = deepEqual(obj3, obj4);
 
 equalFlag ?  console.log('OK') : console.log(`Error: ${notEqualPath}`);
