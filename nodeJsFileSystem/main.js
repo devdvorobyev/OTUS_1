@@ -5,31 +5,22 @@ const pathExtension = require('path');
 async function printFileSysPath (fileSys, path, depFlag = '',depLevel = 1, prntPath = false, level = 2, dirCount = 0, fileCount = 0) {
 
     let countDir = dirCount,
-        countFiles = fileCount,
-        fileArray = [];
+        countFiles = fileCount;
 
-    prntPath ? printTree(path.replace(/.\//gm,''), level - 1) : '';
+    if(prntPath) printTree(path.replace(/.\//gm,''), level - 1);
 
     /* Читаем файлы */
-    await readFiles(fileSys, path).then(
-        (files) => {
-            fileArray = files;
-        },
-        (error) => {
-            console.error(error);
-        }
-    )
-    
+    const files = await readFiles(fileSys, path).catch(err => console.log(err));
     /* перебираем файлы в массиве, не forEach - т.к. тогда нельзя сделать нормальный await */
-    for(let key in fileArray){
-        if( pathExtension.extname(fileArray[key]) ){
+    for(let key in files){
+        if( pathExtension.extname(files[key]) ){
             countFiles++
-            printTree(fileArray[key], level);
+            printTree(files[key], level);
         }else{
             countDir++
-            printTree(fileArray[key], level);
+            printTree(files[key], level);
             if(level <= depLevel){
-                let { countDir:returnedCntDir, countFiles:returnedCntFiles } = await printFileSysPath(fileSys, path + '/' + fileArray[key], '-d', depLevel, false, level + 1) 
+                let { countDir:returnedCntDir, countFiles:returnedCntFiles } = await printFileSysPath(fileSys, path + '/' + files[key], '-d', depLevel, false, level + 1) 
                 countFiles += returnedCntFiles;
                 countDir += returnedCntDir;
             }else{
@@ -54,7 +45,7 @@ function readFiles(fileSys, path){
     return new Promise((resolve, reject) => {
         fileSys.readdir(path, (err, files) => {
             if(err) reject(err); // не прочитать содержимое папки
-            resolve(files)    
+            resolve(files.filter(el => !(/(^|\/)\.[^\/\.]/g).test(el)));//Игнорим системные файлы   
         });
     })
 }
