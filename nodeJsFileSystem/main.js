@@ -46,7 +46,7 @@ function readFiles(fileSys, path){
     return new Promise((resolve, reject) => {
         fileSys.readdir(path, (err, files) => {
             if( err ) reject(err); // не прочитать содержимое папки
-            if( files.length ) resolve(files.filter(el => !(/(^|\/)\.[^\/\.]/g).test(el)));//Игнорим системные файлы
+            if( files && files !== undefined && files.length ) resolve(files.filter(el => !(/(^|\/)\.[^\/\.]/g).test(el)));//Игнорим системные файлы
             resolve(); //Если в папке нет файлов
         });
     })
