@@ -1,6 +1,10 @@
 const obj1 = {
     a: {
+<<<<<<< HEAD
         b: [1,3,4,5,6],
+=======
+        b: 1,
+>>>>>>> c557cf1 (Доработал функцию)
     },
 };
 const obj2 = {
@@ -10,6 +14,7 @@ const obj2 = {
 };
 const obj3 = {
     a: {
+<<<<<<< HEAD
         b: {
             c: {
                 d: {
@@ -32,6 +37,12 @@ const obj4 = {
     },
 };
 
+=======
+        b: 1,
+    },
+};
+
+>>>>>>> c557cf1 (Доработал функцию)
 let deepEqual = (sourceObject, destinationObject, notValidPath = '$') => {
 
     var equalFlag = true,
