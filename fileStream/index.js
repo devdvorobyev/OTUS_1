@@ -30,5 +30,9 @@ async function processLineByLine( readPath, writePath ) {
     writeStream.close();
 }
 
-//node index.js ./files_to_read/fst.txt ./result_file/new.txt
+/**
+ * @param { String } process.argv[2] - путь к файлу для чтения
+ * @param { String } process.argv[3] - путь к файлу для записи
+ * @testCommand node index.js ./files_to_read/fst.txt ./result_file/new.txt
+ */
 processLineByLine( process.argv[2], process.argv[3] );
